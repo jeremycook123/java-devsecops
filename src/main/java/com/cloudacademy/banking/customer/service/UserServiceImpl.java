@@ -3,13 +3,9 @@ package com.cloudacademy.banking.customer.service;
 import lombok.AllArgsConstructor;
 import com.cloudacademy.banking.customer.entity.User;
 import com.cloudacademy.banking.customer.repo.UserRepository;
-import com.cloudacademy.banking.customer.service.UserService;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
