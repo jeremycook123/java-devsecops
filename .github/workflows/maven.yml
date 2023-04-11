@@ -17,7 +17,7 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v3
       - name: Run GitHub Action for ORT
-        uses: oss-review-toolkit/ort-ci-github-action@v1'
+        uses: oss-review-toolkit/ort-ci-github-action@v1
       # - name: Set up JDK 17
       #   uses: actions/setup-java@v2
       #   with:
