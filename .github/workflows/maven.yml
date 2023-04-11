@@ -6,7 +6,7 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
-#version1
+#version1.1
 jobs:
   build:
     name: Build
