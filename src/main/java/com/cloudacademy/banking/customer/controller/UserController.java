@@ -16,6 +16,8 @@ public class UserController {
 
     private UserService userService;
 
+    public String secret = "some-secret-value";
+
     // build create User REST API
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user){
