@@ -16,7 +16,8 @@ public class UserController {
 
     private UserService userService;
 
-    public String secret = "some-secret-value";
+    public String secret1 = "some-secret-value";
+    public String password = "some-password";
 
     // build create User REST API
     @PostMapping
