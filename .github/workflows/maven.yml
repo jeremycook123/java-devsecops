@@ -6,8 +6,6 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
-#update 1.0
-
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -25,31 +23,6 @@ jobs:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
-    - name: Build and analyze
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      run: mvn -e -B compile
-
-  codeql-analysis:
-    needs: build
-    runs-on: ubuntu-22.04
-    permissions:
-      security-events: write
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: java
-        tools: latest
-    - name: Setup Java
-      uses: actions/setup-java@v3
-      with:
-        distribution: temurin
-        java-version: 17
     - name: Build and analyze
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
