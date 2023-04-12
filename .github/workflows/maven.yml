@@ -54,8 +54,17 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
       run: mvn -e -B compile
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+
+    - name: Generate SBOM
+      run: |
+        curl -Lo $RUNNER_TEMP/sbom-tool https://github.com/microsoft/sbom-tool/releases/latest/download/sbom-tool-linux-x64
+        chmod +x $RUNNER_TEMP/sbom-tool
+        $RUNNER_TEMP/sbom-tool generate -b ./sbom -bc . -pn java-devsecops -pv 1.0.0 -ps CloudAcademy -nsb http://cloudacademy.com/java-devsecops -V Verbose
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        path: buildOutput
 
 #version1.3
 # jobs:

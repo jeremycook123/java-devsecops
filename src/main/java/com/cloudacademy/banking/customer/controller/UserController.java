@@ -16,10 +16,6 @@ public class UserController {
 
     private UserService userService;
 
-    public String secret1 = "some-secret-value";
-    public String password = "some-password";
-    public String aws_access_key_id = "AKIAVQTVDKFDT32XC34D";
-
     // build create User REST API
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user){
