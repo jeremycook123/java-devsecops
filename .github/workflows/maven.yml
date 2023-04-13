@@ -24,6 +24,11 @@ jobs:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
+
+    - name: Set Release version env variable
+        run: |
+          echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+
     - name: Build and analyze
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -39,9 +44,9 @@ jobs:
         password: ${{ secrets.NEXUS_PASSWORD }}
         format: maven2
         repository: maven-releases
-        coordinates: groupId=com.cloudacademy.banking artifactId=customer version=1.0.0
+        coordinates: groupId=com.cloudacademy.banking artifactId=customer version=${{ env.RELEASE_VERSION }}
         assets: extension=jar
-        filename: ./target/customer-1.0.0.jar
+        filename: ./target/customer-${{ env.RELEASE_VERSION }}.jar
 
     - name: Generate SBOM
       run: |
