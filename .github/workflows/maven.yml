@@ -34,11 +34,11 @@ jobs:
     - name: Nexus Repo Publish
       uses: sonatype-nexus-community/nexus-repo-github-action@master
       with:
-        serverUrl: ${{ secrets.NEXUS_SERVER_URL }}
+        serverUrl: ${{ secrets.NEXUS_SERVER_URL }}/repository/java-devsecops/
         username: admin
         password: ${{ secrets.NEXUS_PASSWORD }}
         format: maven2
-        repository: maven-snapshots
+        repository: java-devsecops
         coordinates: groupId=com.cloudacademy.banking artifactId=customer version=0.0.1-SNAPSHOT
         assets: extension=jar
         filename: ./target/customer-0.0.1-SNAPSHOT.jar
