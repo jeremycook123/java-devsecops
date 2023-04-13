@@ -28,7 +28,19 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      run: mvn -e -B compile
+      run: mvn -e -B compile org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=java-devsecops
+
+    - name: Nexus Repo Publish
+      uses: sonatype-nexus-community/nexus-repo-github-action@master
+      with:
+        serverUrl: ${{ secrets.NEXUS_SERVER_URL }}
+        username: admin
+        password: ${{ secrets.NEXUS_PASSWORD }}
+        format: maven2
+        repository: maven-releases
+        coordinates: groupId=com.cloudacademy.banking artifactId=customer version=0.0.1-SNAPSHOT
+        assets: extension=jar
+        filename: ./target/customer-0.0.1-SNAPSHOT.jar
 
     - name: Generate SBOM
       run: |
@@ -41,6 +53,8 @@ jobs:
       uses: actions/upload-artifact@v3.1.0
       with:
         path: sbom
+
+
 
 #version1.3
 # jobs:
