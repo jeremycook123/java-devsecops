@@ -23,6 +23,8 @@ jobs:
 
     - name: Checkout Repository
       uses: actions/checkout@v3
+#     with:
+#       fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
     - name: Setup Java
       uses: actions/setup-java@v3
@@ -65,7 +67,7 @@ jobs:
         username: admin
         password: ${{ secrets.NEXUS_PASSWORD }}
         format: maven2
-        repository: maven-releases
+        repository: cloudacademy-releases
         coordinates: groupId=com.cloudacademy.banking artifactId=customer version=${{ env.RELEASE_VERSION }}
         assets: extension=jar
         filename: ./target/customer-${{ env.RELEASE_VERSION }}.jar
@@ -91,43 +93,9 @@ jobs:
       with:
         path: sbom
 
-
-
-#version1.3
-# jobs:
-#   build:
-#     name: Build
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v3
-#         with:
-#           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 #       - name: Run GitHub Action for ORT
 #         uses: oss-review-toolkit/ort-ci-github-action@v1
 #         with:
 #           allow-dynamic-versions: 'true'
 #           ort-cli-analyze-args: '--package-managers Maven'
-      # - name: Set up JDK 17
-      #   uses: actions/setup-java@v2
-      #   with:
-      #     distribution: 'temurin'
-      #     java-version: '17'
-      #     overwrite-settings: false
-      # - name: Cache SonarQube packages
-      #   uses: actions/cache@v1
-      #   with:
-      #     path: ~/.sonar/cache
-      #     key: ${{ runner.os }}-sonar
-      #     restore-keys: ${{ runner.os }}-sonar
-      # - name: Cache Maven packages
-      #   uses: actions/cache@v1
-      #   with:
-      #     path: ~/.m2
-      #     key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-      #     restore-keys: ${{ runner.os }}-m2
-      # - name: Build and analyze
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      #   run: mvn -e -B compile org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=java-devsecops
+
