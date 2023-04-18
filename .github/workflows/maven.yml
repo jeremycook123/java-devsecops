@@ -51,7 +51,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      run: mvn -e -B package -DskipTests org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=java-devsecops
+      #run: mvn -e -B package -DskipTests org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=java-devsecops
+      run: mvn -e -B package -DskipTests
 
     - name: Nexus Repo Publish
       uses: sonatype-nexus-community/nexus-repo-github-action@master
