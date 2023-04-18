@@ -11,6 +11,23 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
+    - name: Get Github action IP
+      uses: haythem/public-ip@v1.2
+      id: ip
+
+    - name: Setting environment variables..
+      run: |
+        echo "AWS_DEFAULT_REGION=us-west-2" >> $GITHUB_ENV
+        echo "AWS_SG_ID=sg-0182a5eb937e42b83" >> $GITHUB_ENV
+
+    - name: Add Github Actions IP to Security group
+      run: |
+        aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_SG_ID }} --protocol tcp --port 8081 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
+
     - name: Checkout Repository
       uses: actions/checkout@v3
     - name: Setup Java
@@ -47,6 +64,14 @@ jobs:
         coordinates: groupId=com.cloudacademy.banking artifactId=customer version=${{ env.RELEASE_VERSION }}
         assets: extension=jar
         filename: ./target/customer-${{ env.RELEASE_VERSION }}.jar
+
+    - name: Remove Github Actions IP from security group
+      run: |
+        aws ec2 revoke-security-group-ingress --group-id ${{ env.AWS_SG_ID }} --protocol tcp --port 8081 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
 
     - name: Generate SBOM
       run: |
