@@ -18,10 +18,12 @@ jobs:
     - name: Setting environment variables..
       run: |
         echo "AWS_DEFAULT_REGION=us-west-2" >> $GITHUB_ENV
-        echo "AWS_SG_ID=sg-0182a5eb937e42b83" >> $GITHUB_ENV
+        echo "AWS_SONARQUBE_SG_ID=sg-0e4cabba47f927692" >> $GITHUB_ENV
+        echo "AWS_NEXUS_SG_ID=sg-0182a5eb937e42b83" >> $GITHUB_ENV
 
     - name: Checkout Repository
       uses: actions/checkout@v3
+
     - name: Setup Java
       uses: actions/setup-java@v3
       with:
@@ -39,21 +41,22 @@ jobs:
       run: |
         echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
+    - name: Add Github Actions IP to Security group
+      run: |
+        aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_SONARQUBE_SG_ID }} --protocol tcp --port 9000 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+        aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_NEXUS_SG_ID }} --protocol tcp --port 8081 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
+
     - name: Build and analyze
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      #run: mvn -e -B package -DskipTests org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=java-devsecops
-      run: mvn -e -B package -DskipTests
-
-    - name: Add Github Actions IP to Security group
-      run: |
-        aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_SG_ID }} --protocol tcp --port 8081 --cidr ${{ steps.ip.outputs.ipv4 }}/32
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
+      run: mvn -e -B package -DskipTests org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=java-devsecops
+      #run: mvn -e -B package -DskipTests
 
     - name: Nexus Repo Publish
       uses: sonatype-nexus-community/nexus-repo-github-action@master
@@ -69,7 +72,8 @@ jobs:
 
     - name: Remove Github Actions IP from security group
       run: |
-        aws ec2 revoke-security-group-ingress --group-id ${{ env.AWS_SG_ID }} --protocol tcp --port 8081 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+        aws ec2 revoke-security-group-ingress --group-id ${{ env.AWS_SONARQUBE_SG_ID }} --protocol tcp --port 9000 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+        aws ec2 revoke-security-group-ingress --group-id ${{ env.AWS_NEXUS_SG_ID }} --protocol tcp --port 8081 --cidr ${{ steps.ip.outputs.ipv4 }}/32
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
