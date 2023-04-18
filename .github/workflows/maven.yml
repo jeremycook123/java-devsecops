@@ -20,14 +20,6 @@ jobs:
         echo "AWS_DEFAULT_REGION=us-west-2" >> $GITHUB_ENV
         echo "AWS_SG_ID=sg-0182a5eb937e42b83" >> $GITHUB_ENV
 
-    - name: Add Github Actions IP to Security group
-      run: |
-        aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_SG_ID }} --protocol tcp --port 8081 --cidr ${{ steps.ip.outputs.ipv4 }}/32
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
-
     - name: Checkout Repository
       uses: actions/checkout@v3
     - name: Setup Java
@@ -35,6 +27,7 @@ jobs:
       with:
         distribution: temurin
         java-version: 17
+
     - name: Cache Maven packages
       uses: actions/cache@v1
       with:
@@ -53,6 +46,14 @@ jobs:
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
       #run: mvn -e -B package -DskipTests org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=java-devsecops
       run: mvn -e -B package -DskipTests
+
+    - name: Add Github Actions IP to Security group
+      run: |
+        aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_SG_ID }} --protocol tcp --port 8081 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
 
     - name: Nexus Repo Publish
       uses: sonatype-nexus-community/nexus-repo-github-action@master
