@@ -2,12 +2,12 @@ package com.cloudacademy.banking.unsafe;
 
 public class GateKeeperSvc {
     /**
-     * The constant APP_KEY.
+     * APP_KEY constant - secret key for the application
      */
     public final static String APP_KEY = "Z10N0101";
     
     /**
-     * The constant APP_SECRET.
+     * APP_SECRET constant - secret for the application
      */
     public final static String APP_SECRET = "TrustNo1";
 }
