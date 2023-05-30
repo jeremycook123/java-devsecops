@@ -1,0 +1,11 @@
+FROM amazoncorretto:17-alpine3.17
+
+RUN mkdir -p /cloudacademy/app
+WORKDIR /cloudacademy/app
+RUN ls -la
+
+COPY --from=builder target/customer-*.jar ./customer-api.jar
+
+EXPOSE 8080
+
+CMD ["java", "-jar", "customer-api.jar"]
