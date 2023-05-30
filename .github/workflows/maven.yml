@@ -89,14 +89,26 @@ jobs:
         mkdir sbom
         $RUNNER_TEMP/sbom-tool generate -b sbom -bc . -pn java-devsecops -pv 1.0.0 -ps CloudAcademy -nsb http://cloudacademy.com/java-devsecops -V Verbose
 
-    - name: Upload a Build Artifact
+    - name: Upload SBOM
       uses: actions/upload-artifact@v3.1.0
       with:
+        name: sbom
         path: sbom
 
-#       - name: Run GitHub Action for ORT
-#         uses: oss-review-toolkit/ort-ci-github-action@v1
-#         with:
-#           allow-dynamic-versions: 'true'
-#           ort-cli-analyze-args: '--package-managers Maven'
+    - name: Depcheck
+      uses: dependency-check/Dependency-Check_Action@main
+      id: Depcheck
+      with:
+        project: 'test'
+        path: '.'
+        format: 'HTML'
+        out: 'reports' # this is the default, no need to specify unless you wish to override it
+        args: >
+          --failOnCVSS 7
+          --enableRetired
 
+    - name: Upload Dependency Check Report
+      uses: actions/upload-artifact@v3.1.0
+      with:
+        name: Depcheck report
+        path: ${{github.workspace}}/reports

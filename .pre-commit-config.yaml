@@ -1,6 +1,11 @@
 repos:
   - repo: https://github.com/thoughtworks/talisman
-    rev: "v1.30.2"
+    rev: "v1.31.0"
     hooks:
     - id: talisman-commit
-      entry: cmd --githook pre-commit
+      name: talisman
+      entry: talisman --githook pre-commit
+      stages: [commit]
+      # talisman currently discovers files by itself and does not take them on the cli
+      pass_filenames: false
+      types: [text]
