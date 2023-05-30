@@ -4,7 +4,7 @@ RUN mkdir -p /cloudacademy/app
 WORKDIR /cloudacademy/app
 RUN ls -la
 
-COPY --from=builder target/customer-*.jar ./customer-api.jar
+COPY ./target/customer-*.jar ./customer-api.jar
 
 EXPOSE 8080
 
