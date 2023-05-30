@@ -45,13 +45,13 @@ jobs:
         echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
     - name: Add Github Actions IP to Security group
-      run: |
-        aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_SONARQUBE_SG_ID }} --protocol tcp --port 9000 --cidr ${{ steps.ip.outputs.ipv4 }}/32
-        aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_NEXUS_SG_ID }} --protocol tcp --port 8081 --cidr ${{ steps.ip.outputs.ipv4 }}/32
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
+      run: |
+        aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_SONARQUBE_SG_ID }} --ip-permissions IpProtocol=tcp,FromPort=9000,ToPort=9000,IpRanges="[{CidrIp=${{ steps.ip.outputs.ipv4 }}/32,Description='GitHub Action Runner'}]"
+        aws ec2 authorize-security-group-ingress --group-id ${{ env.AWS_NEXUS_SG_ID }} --ip-permissions IpProtocol=tcp,FromPort=8081,ToPort=8081,IpRanges="[{CidrIp=${{ steps.ip.outputs.ipv4 }}/32,Description='GitHub Action Runner'}]"
 
     - name: Build and analyze
       env:
@@ -74,13 +74,14 @@ jobs:
         filename: ./target/customer-${{ env.RELEASE_VERSION }}.jar
 
     - name: Remove Github Actions IP from security group
-      run: |
-        aws ec2 revoke-security-group-ingress --group-id ${{ env.AWS_SONARQUBE_SG_ID }} --protocol tcp --port 9000 --cidr ${{ steps.ip.outputs.ipv4 }}/32
-        aws ec2 revoke-security-group-ingress --group-id ${{ env.AWS_NEXUS_SG_ID }} --protocol tcp --port 8081 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+      if: always()
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
+      run: |
+        aws ec2 revoke-security-group-ingress --group-id ${{ env.AWS_SONARQUBE_SG_ID }} --ip-permissions IpProtocol=tcp,FromPort=9000,ToPort=9000,IpRanges="[{CidrIp=${{ steps.ip.outputs.ipv4 }}/32,Description='GitHub Action Runner'}]" || true
+        aws ec2 revoke-security-group-ingress --group-id ${{ env.AWS_NEXUS_SG_ID }} --ip-permissions IpProtocol=tcp,FromPort=8081,ToPort=8081,IpRanges="[{CidrIp=${{ steps.ip.outputs.ipv4 }}/32,Description='GitHub Action Runner'}]" || true
 
     - name: Generate SBOM
       run: |
