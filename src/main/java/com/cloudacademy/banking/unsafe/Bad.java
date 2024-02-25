@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.io.File;
 import java.net.UnknownHostException;
+import java.io.IOException;
 
 public class Bad {
     public int field;
@@ -14,6 +15,7 @@ public class Bad {
     }
 
     public Bad deserialize(Socket sock) {
+        // unsafe deserialization
         try(ObjectInputStream in = new ObjectInputStream(sock.getInputStream())) {
             return (Bad)in.readObject(); // unsafe
         }
@@ -22,7 +24,7 @@ public class Bad {
         }
     }
 
-    public void connect() throws UnknownHostException {
+    public void connect() throws UnknownHostException, IOException {
         // hardcoded IP address
         String ip = "192.168.12.42";
         Socket socket = new Socket(ip, 6667);
