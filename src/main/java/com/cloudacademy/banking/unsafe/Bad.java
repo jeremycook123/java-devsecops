@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Bad {
@@ -29,6 +30,6 @@ public class Bad {
 
     public void files() {
         File file1 = new File("/tmp/sensitive.txt");
-        File file2 = Paths.get("/tmp/sensitive.txt");
+        Path path = Paths.get("/tmp/sensitive.txt");
     }
 }
