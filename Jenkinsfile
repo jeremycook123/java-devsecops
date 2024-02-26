@@ -26,6 +26,12 @@ pipeline {
             steps {
                 sh 'mvn -B -DskipTests clean package'
             }
+
+            post {
+                always {
+                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                }
+            }
         }
             
         // stage ('Sonar') {
@@ -50,7 +56,7 @@ pipeline {
 
             post {
                 always {
-                    archiveArtifacts artifacts: 'target/*.jar, target/bom.xml', fingerprint: true
+                    archiveArtifacts artifacts: 'target/bom.xml', fingerprint: true
                 }
             }
         }
