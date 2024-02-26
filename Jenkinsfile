@@ -55,6 +55,12 @@ pipeline {
                     dependencyTrackPublisher artifact: 'target/bom.xml', projectName: 'customer-bankingapp', projectVersion: '1.0.2', synchronous: true, dependencyTrackApiKey: API_KEY, autoCreateProjects: true
                 }
             }
+
+            post {
+                always {
+                    archiveArtifacts artifacts: 'target/bom.xml', fingerprint: true
+                }
+            }
         }
     }
 }
