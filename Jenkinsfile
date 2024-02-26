@@ -47,7 +47,7 @@ pipeline {
                     sh '''
                         echo ${API_KEY}
                         mvn -e cyclonedx:makeBom dependency-track:upload-bom \
-                            -DdependencyTrack.apiKey=${API_KEY}
+                            -Ddependency-track.apiKey=${API_KEY}
                     '''
                 }
             }
