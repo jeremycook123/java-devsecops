@@ -34,7 +34,7 @@ pipeline {
                     sh '''
                         mvn clean compile -DskipTests=true sonar:sonar \
                           -Dsonar.projectKey=java-devsecops \
-                          -Dsonar.host.url=http://sonarqube:9000 \
+                          -Dsonar.host.url=http://${SONARQUBE_HOST} \
                           -Dsonar.login=${sonartoken}
                     '''
                 }
