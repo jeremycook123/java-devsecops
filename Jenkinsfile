@@ -52,7 +52,7 @@ pipeline {
         stage('Dependency-Track') {
             steps {
                 withCredentials([string(credentialsId: 'dependency-track', variable: 'API_KEY')]) {
-                    dependencyTrackPublisher artifact: 'target/bom.xml', projectName: 'customer-bankingapp', synchronous: true, dependencyTrackApiKey: API_KEY, autoCreateProjects: true
+                    dependencyTrackPublisher artifact: 'target/bom.xml', projectName: 'customer-bankingapp', projectVersion: '1.0.2', synchronous: true, dependencyTrackApiKey: API_KEY, autoCreateProjects: true
                 }
             }
         }
