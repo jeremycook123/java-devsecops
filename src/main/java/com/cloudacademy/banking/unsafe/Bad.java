@@ -9,8 +9,12 @@ import java.net.UnknownHostException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Bad {
+    static final Logger logger = LogManager.getLogger(Bad.class);
+
     public int field;
 
     Bad(int field) {
@@ -48,5 +52,13 @@ public class Bad {
         // Create an encoder with strength 16
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
         String result = encoder.encode("myPassword");
+    }
+
+    public void doSomethingAndLog(String message) {
+        try {
+            throws new Exception("boom!!");
+        } catch (Exception e) {
+            logger.error("Failed to do something" + e.getMessage());
+        }
     }
 }
