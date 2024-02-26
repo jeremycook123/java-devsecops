@@ -44,7 +44,9 @@ pipeline {
         stage('DependencyTrack') {
             steps {
                 withCredentials([string(credentialsId: 'dependency-track', variable: 'API_KEY')]) {
-                    dependencyTrackPublisher artifact: 'bom.xml', projectName: 'customer-bankingapp', projectVersion: '1.0.0', synchronous: true, dependencyTrackApiKey: API_KEY, projectProperties: [tags: ['tag1', 'tag2'], swidTagId: 'my swid tag', group: 'my group', parentId: 'parent-uuid']
+                    sh '''
+                        mvn -e cyclonedx:makeBom dependency-track:upload-bom -Ddependencytrack.apikey=${API_KEY}
+                    '''
                 }
             }
         }
