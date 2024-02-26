@@ -7,6 +7,7 @@ import java.io.File;
 import java.security.KeyPairGenerator;
 import java.net.UnknownHostException;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 public class Bad {
     public int field;
@@ -36,7 +37,7 @@ public class Bad {
         File file1 = new File("/tmp/sensitive.txt");
     }
 
-    public void cryptoKey() {
+    public void cryptoKey() throws NoSuchAlgorithmException {
         // weak crypto RSA 1024
         KeyPairGenerator keyPairGen1 = KeyPairGenerator.getInstance("RSA");
         keyPairGen1.initialize(1024);
