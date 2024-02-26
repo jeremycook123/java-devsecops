@@ -44,7 +44,7 @@ pipeline {
         stage('BOM') {
             steps {            
                 sh '''
-                    mvn -e mvn org.cyclonedx:cyclonedx-maven-plugin:makeBom
+                    mvn -e org.cyclonedx:cyclonedx-maven-plugin:makeBom
                     tree target
                 '''
             }
