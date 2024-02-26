@@ -56,7 +56,7 @@ public class Bad {
 
     public void doSomethingAndLog(String message) {
         try {
-            throws new Exception("boom!!");
+            throw new Exception("boom!!");
         } catch (Exception e) {
             logger.error("Failed to do something" + e.getMessage());
         }
