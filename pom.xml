@@ -17,7 +17,7 @@
 	<packaging>jar</packaging>
 
 	<name>${project.artifactId}</name>
-	<description>Demo project for Spring Boot</description>
+	<description>DevSecOps Demo Project</description>
 	<organization>
 		<name>CloudAcademy</name>
 		<url>https://cloudacademy.com</url>
@@ -113,7 +113,7 @@
 				<dependency>
 					<groupId>io.github.pmckeown</groupId>
 					<artifactId>dependency-track-maven-plugin</artifactId>
-					<version>1.4.1</version>
+					<version>1.7.0</version>
 				</dependency>
 				</dependencies>
 			</plugin>
