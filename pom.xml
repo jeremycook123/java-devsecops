@@ -12,7 +12,7 @@
 	</parent>
 
 	<groupId>com.cloudacademy.banking</groupId>
-	<artifactId>customer</artifactId>
+	<artifactId>customer-bankapp</artifactId>
 	<version>1.0.2</version>
 	<packaging>jar</packaging>
 
@@ -32,7 +32,7 @@
 			<organizationUrl>https://cloudacademy.com</organizationUrl>
 			<roles>
 				<role>Lead Content Architect</role>
-				<role>DevOps - Researcher and Trainer</role>
+				<role>DevOps - Solutions Architect</role>
 				<role>Success Services</role>
 			</roles>
 		</developer>
@@ -55,7 +55,6 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 			<version>3.0.6</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
@@ -68,7 +67,6 @@
 			<version>1.18.26</version>
 			<optional>true</optional>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

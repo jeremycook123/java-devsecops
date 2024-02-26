@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.io.File;
+import java.security.KeyPairGenerator;
 import java.net.UnknownHostException;
 import java.io.IOException;
 
@@ -33,5 +34,11 @@ public class Bad {
     public void files() {
         // read write to publicly accessible file
         File file1 = new File("/tmp/sensitive.txt");
+    }
+
+    public void cryptoKey() {
+        // weak crypto RSA 1024
+        KeyPairGenerator keyPairGen1 = KeyPairGenerator.getInstance("RSA");
+        keyPairGen1.initialize(1024);
     }
 }
