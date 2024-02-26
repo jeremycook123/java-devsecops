@@ -8,6 +8,7 @@ import java.security.KeyPairGenerator;
 import java.net.UnknownHostException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class Bad {
     public int field;
@@ -41,5 +42,11 @@ public class Bad {
         // weak crypto RSA 1024
         KeyPairGenerator keyPairGen1 = KeyPairGenerator.getInstance("RSA");
         keyPairGen1.initialize(1024);
+    }
+
+    public void password() {
+        // Create an encoder with strength 16
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(16);
+        String result = encoder.encode("myPassword");
     }
 }
