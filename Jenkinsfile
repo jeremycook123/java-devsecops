@@ -45,7 +45,6 @@ pipeline {
             steps {            
                 sh '''
                     mvn -e org.cyclonedx:cyclonedx-maven-plugin:makeBom
-                    tree target
                 '''
             }
         }
