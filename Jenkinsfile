@@ -41,12 +41,20 @@ pipeline {
         //     }
         // }
 
-        stage('DependencyTrack') {
+        stage('BOM') {
+            steps {            
+                sh '''
+                    mvn -e mvn org.cyclonedx:cyclonedx-maven-plugin:makeBom
+                    tree target
+                '''
+            }
+        }
+
+        stage('Dependency-Track') {
             steps {
                 withCredentials([string(credentialsId: 'dependency-track', variable: 'API_KEY')]) {
                     sh '''
-                        mvn -e cyclonedx:makeBom dependency-track:upload-bom \
-                            -Ddependency-track.apiKey=${API_KEY}
+                        dependencyTrackPublisher artifact: 'target/bom.xml', projectId: 'customer-bankingapp', synchronous: true, apiKey: "${API_KEY}", autoCreate: true
                     '''
                 }
             }

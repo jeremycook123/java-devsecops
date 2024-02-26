@@ -105,7 +105,7 @@
 				<executions>
 					<execution>
 						<id>generate-bom</id>
-						<phase>verify</phase>
+						<phase>package</phase>
 						<goals>
 							<goal>makeAggregateBom</goal>
 						</goals>
