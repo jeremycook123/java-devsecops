@@ -106,8 +106,8 @@
 				<artifactId>dependency-track-maven-plugin</artifactId>
 				<version>1.4.1</version>
 				<configuration>
-				<dependencyTrackBaseUrl>http://dependency-track:8080</dependencyTrackBaseUrl>
-				<apiKey></apiKey>
+				<dependencyTrackBaseUrl>${env.DEPENDENCY_TRACK_BASE_URL}</dependencyTrackBaseUrl>
+				<apiKey>${env.DEPENDENCY_TRACK_API_KEY}</apiKey>
 				</configuration>
 				<dependencies>
 				<dependency>
