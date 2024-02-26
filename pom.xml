@@ -107,7 +107,7 @@
 				<version>1.4.1</version>
 				<configuration>
 					<dependencyTrackBaseUrl>http://dependency-track:8080</dependencyTrackBaseUrl>
-					<apiKey>HsyghQQKXdTyjZmtGrS53gOPaBqPihZB</apiKey>
+					<apiKey></apiKey>
 				</configuration>
 				<dependencies>
 				<dependency>
