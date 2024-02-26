@@ -45,6 +45,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'dependency-track', variable: 'API_KEY')]) {
                     sh '''
+                        echo ${API_KEY}
                         mvn -e cyclonedx:makeBom dependency-track:upload-bom \
                             -DdependencyTrack.apiKey=${API_KEY}
                     '''
