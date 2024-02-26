@@ -47,18 +47,18 @@ pipeline {
                     mvn -e org.cyclonedx:cyclonedx-maven-plugin:makeBom
                 '''
             }
+
+            post {
+                always {
+                    archiveArtifacts artifacts: 'target/*.jar, target/bom.xml', fingerprint: true
+                }
+            }
         }
 
         stage('Dependency-Track') {
             steps {
                 withCredentials([string(credentialsId: 'dependency-track', variable: 'API_KEY')]) {
                     dependencyTrackPublisher artifact: 'target/bom.xml', projectName: 'customer-bankingapp', projectVersion: '1.0.2', synchronous: true, dependencyTrackApiKey: API_KEY, autoCreateProjects: true
-                }
-            }
-
-            post {
-                always {
-                    archiveArtifacts artifacts: 'target/bom.xml', fingerprint: true
                 }
             }
         }
