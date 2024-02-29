@@ -1,7 +1,7 @@
 pipeline {
     agent any
 
-    tools { 
+    tools {
         maven 'maven'
         jdk 'jdk21'
     }
@@ -20,7 +20,7 @@ pipeline {
             steps {
                 git url: 'https://github.com/jeremycook123/java-devsecops.git', branch: 'main'
             }
-        }        
+        }
 
         stage ('Build') {
             steps {
@@ -34,21 +34,21 @@ pipeline {
             }
         }
             
-        // stage ('Sonar') {
-        //     steps {
-        //         withCredentials([string(credentialsId: 'sonar', variable: 'sonartoken')]) {
-        //             sh '''
-        //                 mvn clean compile -DskipTests=true sonar:sonar \
-        //                   -Dsonar.projectKey=java-devsecops \
-        //                   -Dsonar.host.url=http://${SONARQUBE_HOST} \
-        //                   -Dsonar.login=${sonartoken}
-        //             '''
-        //         }
-        //     }
-        // }
+        stage ('Sonar') {
+            steps {
+                withCredentials([string(credentialsId: 'sonar', variable: 'sonartoken')]) {
+                    sh '''
+                        mvn clean compile -DskipTests=true sonar:sonar \
+                          -Dsonar.projectKey=customer-bankapp \
+                          -Dsonar.host.url=http://${SONARQUBE_HOST} \
+                          -Dsonar.login=${sonartoken}
+                    '''
+                }
+            }
+        }
 
         stage('BOM') {
-            steps {            
+            steps {
                 sh '''
                     mvn -e org.cyclonedx:cyclonedx-maven-plugin:makeBom
                 '''
