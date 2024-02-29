@@ -16,6 +16,8 @@ public class Bad {
 
     public int field;
 
+    public String credit_card = "4917484589897107";
+
     Bad(int field) {
       this.field = field;
     }
