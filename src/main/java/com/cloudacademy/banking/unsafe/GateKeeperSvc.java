@@ -9,6 +9,7 @@ public class GateKeeperSvc {
     /**
      * APP_SECRET constant - secret for the application
      * Base64 encoded string for "TrustNo1"
+     * v1
      */
     public final static String APP_SECRET = "VHJ1c3RObzEK";
 
