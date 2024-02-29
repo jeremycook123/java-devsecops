@@ -1,0 +1,11 @@
+threshold: low
+custom_severities:
+- detector: Base64Content
+  severity: medium
+- detector: HexContent
+  severity: low
+- detector: CreditCardContent
+  severity: high
+fileignoreconfig:
+- filename: pom.xml
+  ignore_detectors: [filecontent]

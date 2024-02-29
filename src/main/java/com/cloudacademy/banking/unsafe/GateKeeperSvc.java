@@ -5,11 +5,13 @@ public class GateKeeperSvc {
      * APP_KEY constant - secret key for the application
      */
     public final static String APP_KEY = "Z10N0101";
-    
+
+    public final static String PASSWORD = "password1234";
+
     /**
      * APP_SECRET constant - secret for the application
      * Base64 encoded string for "TrustNo1"
-     * v1
+     * v2
      */
     public final static String APP_SECRET = "VHJ1c3RObzEK";
 

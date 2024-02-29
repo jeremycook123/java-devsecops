@@ -4,4 +4,4 @@ repos:
     hooks:
     - id: talisman-commit
       name: talisman
-      entry: talisman --githook pre-commit
+      entry: talisman --githook pre-commit -p **/*.java
