@@ -6,7 +6,6 @@ import java.net.Socket;
 import java.io.File;
 import java.security.KeyPairGenerator;
 import java.net.UnknownHostException;
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
