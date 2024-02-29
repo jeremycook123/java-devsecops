@@ -33,3 +33,5 @@ build/
 .vscode/
 
 talisman_report/
+
+sbom/
