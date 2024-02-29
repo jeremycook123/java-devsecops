@@ -69,9 +69,9 @@ jobs:
         password: ${{ secrets.NEXUS_PASSWORD }}
         format: maven2
         repository: cloudacademy-releases
-        coordinates: groupId=com.cloudacademy.banking artifactId=customer version=${{ env.RELEASE_VERSION }}
+        coordinates: groupId=com.cloudacademy.banking artifactId=customer-bankapp version=${{ env.RELEASE_VERSION }}
         assets: extension=jar
-        filename: ./target/customer-${{ env.RELEASE_VERSION }}.jar
+        filename: ./target/customer-bankapp-${{ env.RELEASE_VERSION }}.jar
 
     - name: Remove Github Actions IP from security group
       if: always()
