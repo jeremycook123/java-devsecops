@@ -1,7 +1,8 @@
 repos:
-  - repo: https://github.com/thoughtworks/talisman
-    rev: "v1.31.0"
+  - repo: local
     hooks:
-    - id: talisman-commit
-      name: talisman
-      entry: talisman --githook pre-commit -p **/*.java
+      - id: checkstyle
+        name: Checkstyle
+        entry: ./run-checkstyle.sh
+        language: script
+        files: \.java$
