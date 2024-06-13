@@ -12,6 +12,7 @@ import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+// v1.0.0
 public class Bad {
     static final Logger logger = LogManager.getLogger(Bad.class);
 
