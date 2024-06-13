@@ -7,9 +7,9 @@ repos:
         language: script
         files: \.java$
 
-  # - repo: https://github.com/thoughtworks/talisman
-  #   rev: "v1.31.0"
-  #   hooks:
-  #   - id: talisman-commit
-  #     name: talisman
-  #     entry: talisman --githook pre-commit -p **/*.java
+  - repo: https://github.com/thoughtworks/talisman
+    rev: "v1.31.0"
+    hooks:
+    - id: talisman-commit
+      name: talisman
+      entry: talisman --githook pre-commit -p **/*.java
