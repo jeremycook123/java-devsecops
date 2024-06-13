@@ -7,6 +7,8 @@ import java.io.File;
 import java.security.KeyPairGenerator;
 import java.net.UnknownHostException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -53,5 +55,11 @@ public class Bad {
         } catch (Exception e) {
             logger.error("Failed to do something" + e.getMessage());
         }
+    }
+
+    public String generateSecretToken() {
+        // predictable pseudorandom number generator
+        Random r = new Random();
+        return Long.toHexString(r.nextLong());
     }
 }
