@@ -35,3 +35,5 @@ build/
 talisman_report/
 
 sbom/
+
+dependency-check-report.html
