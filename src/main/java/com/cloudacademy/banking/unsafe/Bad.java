@@ -12,22 +12,21 @@ import java.util.Random;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-// v1.0.3
+// v1.0.4
 public class Bad {
     static final Logger logger = LogManager.getLogger(Bad.class);
 
     public int field;
 
     Bad(int field) {
-      this.field = field;
+        this.field = field;
     }
 
     public Bad deserialize(Socket sock) {
         // unsafe deserialization
-        try(ObjectInputStream in = new ObjectInputStream(sock.getInputStream())) {
-            return (Bad)in.readObject(); // unsafe
-        }
-        catch(IOException | ClassNotFoundException ex) {
+        try (ObjectInputStream in = new ObjectInputStream(sock.getInputStream())) {
+            return (Bad) in.readObject(); // unsafe
+        } catch (IOException | ClassNotFoundException ex) {
             return null;
         }
     }

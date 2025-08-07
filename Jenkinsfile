@@ -46,75 +46,75 @@ pipeline {
             }
         }
 
-        // stage('Nexus Publish') {
-        //     steps {
-        //         script {
-        //             pom = readMavenPom file: "pom.xml";
-        //             filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
-        //             echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
-        //             artifactPath = filesByGlob[0].path;
-        //             artifactExists = fileExists artifactPath;
-        //             if(artifactExists) {
-        //                 echo "*** File: ${artifactPath}, group: ${pom.groupId}, packaging: ${pom.packaging}, version ${pom.version}";
-        //                 nexusArtifactUploader(
-        //                     nexusVersion: NEXUS_VERSION,
-        //                     protocol: NEXUS_PROTOCOL,
-        //                     nexusUrl: NEXUS_URL,
-        //                     groupId: pom.groupId,
-        //                     version: pom.version,
-        //                     repository: NEXUS_REPOSITORY,
-        //                     credentialsId: NEXUS_CREDENTIAL_ID,
-        //                     artifacts: [
-        //                         [artifactId: pom.artifactId,
-        //                         classifier: '',
-        //                         file: artifactPath,
-        //                         type: pom.packaging],
-        //                         [artifactId: pom.artifactId,
-        //                         classifier: '',
-        //                         file: "pom.xml",
-        //                         type: "pom"]
-        //                     ]
-        //                 );
-        //             } else {
-        //                 error "*** File: ${artifactPath}, could not be found";
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Nexus Publish') {
+            steps {
+                script {
+                    pom = readMavenPom file: "pom.xml";
+                    filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
+                    echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
+                    artifactPath = filesByGlob[0].path;
+                    artifactExists = fileExists artifactPath;
+                    if(artifactExists) {
+                        echo "*** File: ${artifactPath}, group: ${pom.groupId}, packaging: ${pom.packaging}, version ${pom.version}";
+                        nexusArtifactUploader(
+                            nexusVersion: NEXUS_VERSION,
+                            protocol: NEXUS_PROTOCOL,
+                            nexusUrl: NEXUS_URL,
+                            groupId: pom.groupId,
+                            version: pom.version,
+                            repository: NEXUS_REPOSITORY,
+                            credentialsId: NEXUS_CREDENTIAL_ID,
+                            artifacts: [
+                                [artifactId: pom.artifactId,
+                                classifier: '',
+                                file: artifactPath,
+                                type: pom.packaging],
+                                [artifactId: pom.artifactId,
+                                classifier: '',
+                                file: "pom.xml",
+                                type: "pom"]
+                            ]
+                        );
+                    } else {
+                        error "*** File: ${artifactPath}, could not be found";
+                    }
+                }
+            }
+        }
 
-        // stage ('Sonar') {
-        //     steps {
-        //         withCredentials([string(credentialsId: 'sonar', variable: 'sonartoken')]) {
-        //             sh '''
-        //                 mvn clean compile -DskipTests=true sonar:sonar \
-        //                   -Dsonar.projectKey=customer-bankapp \
-        //                   -Dsonar.host.url=http://${SONARQUBE_HOST} \
-        //                   -Dsonar.login=${sonartoken}
-        //             '''
-        //         }
-        //     }
-        // }
+        stage ('Sonar') {
+            steps {
+                withCredentials([string(credentialsId: 'sonar', variable: 'sonartoken')]) {
+                    sh '''
+                        mvn clean compile -DskipTests=true sonar:sonar \
+                          -Dsonar.projectKey=customer-bankapp \
+                          -Dsonar.host.url=http://${SONARQUBE_HOST} \
+                          -Dsonar.login=${sonartoken}
+                    '''
+                }
+            }
+        }
 
-        // stage('BOM') {
-        //     steps {
-        //         sh '''
-        //             mvn -e org.cyclonedx:cyclonedx-maven-plugin:makeBom
-        //         '''
-        //     }
+        stage('BOM') {
+            steps {
+                sh '''
+                    mvn -e org.cyclonedx:cyclonedx-maven-plugin:makeBom
+                '''
+            }
 
-        //     post {
-        //         always {
-        //             archiveArtifacts artifacts: 'target/bom.xml', fingerprint: true
-        //         }
-        //     }
-        // }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'target/bom.xml', fingerprint: true
+                }
+            }
+        }
 
-        // stage('Dependency-Track') {
-        //     steps {
-        //         withCredentials([string(credentialsId: 'dependency-track', variable: 'API_KEY')]) {
-        //             dependencyTrackPublisher artifact: 'target/bom.xml', projectName: 'customer-bankingapp', projectVersion: '1.0.2', synchronous: true, dependencyTrackApiKey: API_KEY, autoCreateProjects: true
-        //         }
-        //     }
-        // }
+        stage('Dependency-Track') {
+            steps {
+                withCredentials([string(credentialsId: 'dependency-track', variable: 'API_KEY')]) {
+                    dependencyTrackPublisher artifact: 'target/bom.xml', projectName: 'customer-bankingapp', projectVersion: '1.0.2', synchronous: true, dependencyTrackApiKey: API_KEY, autoCreateProjects: true
+                }
+            }
+        }
     }
 }
