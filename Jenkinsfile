@@ -67,6 +67,20 @@ pipeline {
             }
         }
 
+        stage('BOM') {
+            steps {
+                sh '''
+                    mvn -e org.cyclonedx:cyclonedx-maven-plugin:makeBom
+                '''
+            }
+
+            post {
+                always {
+                    archiveArtifacts artifacts: 'target/bom.xml', fingerprint: true
+                }
+            }
+        }
+
         stage('Dependency-Track') {
             steps {
                 withCredentials([string(credentialsId: 'dependency-track', variable: 'API_KEY')]) {
@@ -107,20 +121,6 @@ pipeline {
                     } else {
                         error "*** File: ${artifactPath}, could not be found";
                     }
-                }
-            }
-        }
-
-        stage('BOM') {
-            steps {
-                sh '''
-                    mvn -e org.cyclonedx:cyclonedx-maven-plugin:makeBom
-                '''
-            }
-
-            post {
-                always {
-                    archiveArtifacts artifacts: 'target/bom.xml', fingerprint: true
                 }
             }
         }
