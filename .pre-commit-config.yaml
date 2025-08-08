@@ -3,13 +3,15 @@ repos:
     hooks:
       - id: checkstyle
         name: Checkstyle
-        entry: ./run-checkstyle.sh
+        entry: ./run-precommit-checks.sh checkstyle
         language: script
         files: \.java$
 
-  - repo: https://github.com/thoughtworks/talisman
-    rev: "v1.31.0"
+  - repo: local
     hooks:
-    - id: talisman-commit
-      name: talisman
-      entry: talisman --githook pre-commit -p **/*.java
+      - id: talisman
+        name: Talisman
+        entry: ./run-precommit-checks.sh talisman
+        language: script
+        files: .*
+        # entry: talisman --githook pre-commit -p **/*.java
