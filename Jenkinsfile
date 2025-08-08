@@ -50,7 +50,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'sonar', variable: 'sonartoken')]) {
                     sh '''
-                        mvn clean compile -DskipTests=true sonar:sonar \
+                        mvn compile -DskipTests=true sonar:sonar \
                           -Dsonar.projectKey=customer-bankapp \
                           -Dsonar.host.url=http://${SONARQUBE_HOST} \
                           -Dsonar.login=${sonartoken}
