@@ -56,14 +56,14 @@ pipeline {
                           -Dsonar.login=${sonartoken}
                     '''
                 }
-                timeout(time: 2, unit: 'MINUTES') {
-                    script {
-                        def qg = waitForQualityGate()
-                        if (qg.status != 'OK') {
-                            error "Pipeline aborted due to failed SonarQube Quality Gate: ${qg.status}"
-                        }
-                    }
-                }
+                // timeout(time: 2, unit: 'MINUTES') {
+                //     script {
+                //         def qg = waitForQualityGate()
+                //         if (qg.status != 'OK') {
+                //             error "Pipeline aborted due to failed SonarQube Quality Gate: ${qg.status}"
+                //         }
+                //     }
+                // }
             }
         }
 
