@@ -46,6 +46,35 @@ pipeline {
             }
         }
 
+        stage ('Sonar') {
+            steps {
+                withCredentials([string(credentialsId: 'sonar', variable: 'sonartoken')]) {
+                    sh '''
+                        mvn clean compile -DskipTests=true sonar:sonar \
+                          -Dsonar.projectKey=customer-bankapp \
+                          -Dsonar.host.url=http://${SONARQUBE_HOST} \
+                          -Dsonar.login=${sonartoken}
+                    '''
+                }
+                timeout(time: 2, unit: 'MINUTES') {
+                    script {
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to failed SonarQube Quality Gate: ${qg.status}"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Dependency-Track') {
+            steps {
+                withCredentials([string(credentialsId: 'dependency-track', variable: 'API_KEY')]) {
+                    dependencyTrackPublisher artifact: 'target/bom.xml', projectName: 'customer-bankingapp', projectVersion: '1.0.2', synchronous: true, dependencyTrackApiKey: API_KEY, autoCreateProjects: true
+                }
+            }
+        }
+
         stage('Nexus Publish') {
             steps {
                 script {
@@ -82,19 +111,6 @@ pipeline {
             }
         }
 
-        stage ('Sonar') {
-            steps {
-                withCredentials([string(credentialsId: 'sonar', variable: 'sonartoken')]) {
-                    sh '''
-                        mvn clean compile -DskipTests=true sonar:sonar \
-                          -Dsonar.projectKey=customer-bankapp \
-                          -Dsonar.host.url=http://${SONARQUBE_HOST} \
-                          -Dsonar.login=${sonartoken}
-                    '''
-                }
-            }
-        }
-
         stage('BOM') {
             steps {
                 sh '''
@@ -105,14 +121,6 @@ pipeline {
             post {
                 always {
                     archiveArtifacts artifacts: 'target/bom.xml', fingerprint: true
-                }
-            }
-        }
-
-        stage('Dependency-Track') {
-            steps {
-                withCredentials([string(credentialsId: 'dependency-track', variable: 'API_KEY')]) {
-                    dependencyTrackPublisher artifact: 'target/bom.xml', projectName: 'customer-bankingapp', projectVersion: '1.0.2', synchronous: true, dependencyTrackApiKey: API_KEY, autoCreateProjects: true
                 }
             }
         }
